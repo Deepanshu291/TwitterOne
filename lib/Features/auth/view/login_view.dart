@@ -1,35 +1,52 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fwitter/Components/Loader.dart';
 import 'package:fwitter/Constants/constants.dart';
+import 'package:fwitter/Features/auth/controller/auth_controller.dart';
 import 'package:fwitter/Features/auth/view/signup_view.dart';
 import 'package:fwitter/utils/pallate.dart';
 import '../../../Components/components.dart';
 import '../widgets/textfieldwidget.dart';
 
-class LoginView extends StatefulWidget {
-  static route() => MaterialPageRoute(builder: (context) =>const LoginView());
+class LoginView extends ConsumerStatefulWidget {
+  static route() => MaterialPageRoute(builder: (context) => const LoginView());
   const LoginView({super.key});
 
   @override
-  State<LoginView> createState() => _LoginViewState();
+  ConsumerState<LoginView> createState() => _LoginViewState();
 }
 
-class _LoginViewState extends State<LoginView> {
+class _LoginViewState extends ConsumerState<LoginView> {
   final email = TextEditingController();
   final password = TextEditingController();
   final appbar = Uiconst.appBar();
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    email.dispose();
+    password.dispose();
+  }
+
+  void onLogin() {
+    final res = ref.watch(AuthControllerProvider.notifier);
+    res.login(email: email.text, password: password.text, context: context);
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final isLoading = ref.watch(AuthControllerProvider);
     return Scaffold(
       appBar: appbar,
-      body: Center(
+      body: isLoading? const Loader() :Center(
         child: SingleChildScrollView(
             child: Padding(
-          padding:const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment:CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
                 "Sign in to Fwitter",
@@ -74,7 +91,7 @@ class _LoginViewState extends State<LoginView> {
                 child: roundsmallbtn(
                   label: 'Sign in',
                   icon: Icons.abc,
-                  ontap: () {},
+                  ontap: () => onLogin(),
                 ),
               ),
               const SizedBox(
@@ -88,14 +105,11 @@ class _LoginViewState extends State<LoginView> {
                     children: [
                       TextSpan(
                           text: " Sign up",
-                          style:
-                           const   TextStyle(color: Pallete.blueColor, fontSize: 16),
+                          style: const TextStyle(
+                              color: Pallete.blueColor, fontSize: 16),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
-                              Navigator.push(
-                                context,
-                                SignUpView.route()
-                              );
+                              Navigator.push(context, SignUpView.route());
                             })
                     ]),
               )

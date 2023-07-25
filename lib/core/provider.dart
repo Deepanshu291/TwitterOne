@@ -1,7 +1,6 @@
 import 'package:appwrite/appwrite.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fwitter/Constants/appwrite_const.dart';
-import 'package:fwitter/Services/appwrite_client.dart';
 
 final appwriteClientProvider = Provider((ref) {
   Client client = Client();

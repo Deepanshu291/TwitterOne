@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fwitter/Components/Loader.dart';
 import 'package:fwitter/Features/auth/controller/auth_controller.dart';
 import '../../../Components/components.dart';
 import '../../../Constants/appbar.dart';
@@ -8,7 +9,7 @@ import '../../../utils/pallate.dart';
 import '../widgets/textfieldwidget.dart';
 
 class SignUpView extends ConsumerStatefulWidget {
-  static route() => MaterialPageRoute(builder: (context) =>const SignUpView());
+  static route() => MaterialPageRoute(builder: (context) => const SignUpView());
   const SignUpView({super.key});
 
   @override
@@ -35,9 +36,10 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
 
   @override
   Widget build(BuildContext context) {
+    final isLoading = ref.watch(AuthControllerProvider);
     return Scaffold(
       appBar: appbar,
-      body: Center(
+      body: isLoading ? const Loader():  Center(
         child: SingleChildScrollView(
             child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20),
@@ -45,11 +47,11 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-             const Text(
+              const Text(
                 "Join Fwitter",
                 style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
               ),
-             const SizedBox(
+              const SizedBox(
                 height: 35,
               ),
               roundsmallbtn(
@@ -57,7 +59,7 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                 label: "Sign up with Google",
                 ontap: () {},
               ),
-             const SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               roundsmallbtn(
@@ -99,8 +101,8 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                     children: [
                       TextSpan(
                           text: " Log in",
-                          style:
-                             const TextStyle(color: Pallete.blueColor, fontSize: 16),
+                          style: const TextStyle(
+                              color: Pallete.blueColor, fontSize: 16),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
                               Navigator.pop(
